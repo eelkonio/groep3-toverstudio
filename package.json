@@ -1,0 +1,20 @@
+{
+  "name": "digibord-ai-toverstudio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Digibord AI Toverstudio - interactieve realtime tekenstudio voor groep 3",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cors": "2.8.5",
+    "dotenv": "16.4.7",
+    "express": "4.21.2",
+    "jpeg-js": "0.4.4"
+  }
+}

@@ -249,6 +249,16 @@ public/index.html      De hele interface
 public/css/styles.css  Styling, touch-maten voor het digibord
 public/js/stickers.js  Stickers, thema's en kleuren
 public/js/app.js       Canvas, toverknop, audio
-images/                Schermafbeeldingen voor deze README
+images/                Schermafbeelding en sfeerbeeld voor deze README
 .env.example           Alle instellingen met uitleg
 ```
+
+## Waar het uiteindelijk om gaat
+
+![Sfeerbeeld: een kind tekent aan het digibord terwijl de klas op de grond meekijkt en enthousiast meewijst](images/sfeerbeeld01.png)
+
+Een kind aan het bord, de rest van de groep op de grond, en iedereen die wil weten
+wat er tevoorschijn komt. Daar is dit voor gemaakt.
+
+*Dit sfeerbeeld is een impressie, geen schermafbeelding. De echte interface staat
+bovenaan deze README.*

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <title>Digibord AI Toverstudio</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='52' font-size='52'>&#129668;</text></svg>"
+    />
+  </head>
+  <body>
+    <div class="app">
+      <!-- ============ ZIJBANK: STICKER DOCK ============ -->
+      <aside class="dock" aria-label="Stickers">
+        <h1 class="dock__logo">
+          <span>🪄</span> Toverstudio
+          <button class="dock__gear" id="btnGear" type="button" title="Instellingen voor de juf of meester">
+            ⚙️
+          </button>
+        </h1>
+
+        <div class="panel" id="gearPanel" hidden>
+          <label class="panel__label" for="promptExtra">Eigen beschrijving</label>
+          <input
+            class="panel__input"
+            id="promptExtra"
+            type="text"
+            maxlength="160"
+            placeholder="bijv. met grote vleugels, in een donker bos"
+          />
+          <p class="panel__hint">Wordt aan de prompt toegevoegd. Engels werkt het beste.</p>
+          <label class="panel__label" for="promptSeen">Laatst verstuurde prompt</label>
+          <textarea class="panel__output" id="promptSeen" readonly rows="5"></textarea>
+        </div>
+
+        <div class="namefield">
+          <label class="namefield__label" for="childName">Wie maakt dit?</label>
+          <input
+            class="namefield__input"
+            id="childName"
+            type="text"
+            maxlength="40"
+            autocomplete="off"
+            placeholder="Jouw naam"
+          />
+        </div>
+
+        <div class="dock__tabs" id="stickerTabs" role="tablist"></div>
+
+        <div class="dock__grid" id="stickerGrid" role="listbox" aria-label="Kies een sticker"></div>
+
+        <button class="btn btn--danger dock__clear" id="btnReset" type="button">
+          🗑️ Alles leeg
+        </button>
+      </aside>
+
+      <!-- ============ ZONE 1: SAMENSTELLEN & TEKENEN ============ -->
+      <section class="zone zone--build">
+        <header class="zone__head">
+          <h2>✏️ Maak jouw wezen</h2>
+          <div class="zone__hint" id="buildHint">
+            Tik een sticker, sleep hem, dubbeltik om weg te halen
+          </div>
+        </header>
+
+        <div class="canvas-wrap" id="canvasWrap">
+          <canvas id="studioCanvas"></canvas>
+        </div>
+
+        <div class="toolbar" id="palette">
+          <button class="tool tool--mode is-active" id="btnMove" type="button" title="Slepen">
+            ✋
+          </button>
+          <button class="tool tool--mode" id="btnDraw" type="button" title="Tekenen">🖍️</button>
+          <div class="toolbar__sep"></div>
+          <div class="swatches" id="swatches"></div>
+          <div class="toolbar__sep"></div>
+          <button class="tool" id="btnEraser" type="button" title="Gum: tik op iets om het weg te halen">
+            🧽
+          </button>
+          <button class="tool" id="btnUndo" type="button" title="Laatste weg">↩️</button>
+        </div>
+
+        <div class="intents" id="intents" role="radiogroup" aria-label="Wat wil je maken?"></div>
+
+        <div class="colorpick">
+          <span class="colorpick__label">Welke kleur?</span>
+          <div class="colorpick__row" id="colorRow" role="radiogroup" aria-label="Kleur van je beestje"></div>
+        </div>
+      </section>
+
+      <!-- ============ ZONE 2: LIVE MAGIE ============ -->
+      <section class="zone zone--magic">
+        <header class="zone__head">
+          <h2>✨ Live magie</h2>
+          <div class="zone__hint" id="magicHint">Begin maar te plakken en te tekenen!</div>
+        </header>
+
+        <div class="result" id="result">
+          <img class="result__img" id="resultA" alt="" />
+          <img class="result__img" id="resultB" alt="" />
+
+          <div class="result__placeholder" id="resultPlaceholder">
+            <div class="result__placeholder-icon">🔮</div>
+            <p>Tik op de toverknop<br />als je klaar bent</p>
+          </div>
+
+          <div class="result__spinner" id="resultSpinner" aria-hidden="true">
+            <div class="wand">🪄</div>
+          </div>
+
+          <div class="result__tap" id="resultTap">👆 Tik op de foto om te horen wie het is!</div>
+        </div>
+
+        <div class="status" id="magicStatus">Klaar om te toveren</div>
+
+        <button class="btn btn--speak" id="btnSpeak" type="button" disabled>
+          🔊 Laat horen!
+        </button>
+
+        <div class="bubble" id="bubble" hidden></div>
+      </section>
+
+      <!-- Toverknop, ligt op de scheidingslijn tussen de twee canvassen -->
+      <button class="magicbtn" id="btnMagic" type="button">
+        <span class="magicbtn__icon">🪄</span>
+        <span class="magicbtn__text">Toveren</span>
+      </button>
+    </div>
+
+    <!-- ============ RESET-BEVESTIGING ============ -->
+    <div class="modal" id="resetModal" hidden>
+      <div class="modal__card">
+        <div class="modal__icon">🧹</div>
+        <h3>Alles weggooien?</h3>
+        <p>Dan begin je helemaal opnieuw.</p>
+        <div class="modal__actions">
+          <button class="btn btn--big btn--danger" id="resetYes" type="button">👍 Ja!</button>
+          <button class="btn btn--big" id="resetNo" type="button">👎 Nee</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" hidden></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+    <script src="js/stickers.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

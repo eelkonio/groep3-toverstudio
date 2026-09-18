@@ -1,0 +1,13 @@
+node_modules/
+.env
+.DS_Store
+*.log
+
+# Werk van de kinderen en testmateriaal: blijft lokaal
+generated-images/
+audio-examples/
+tmp/
+
+# Wijst naar een interne registry en werkt niet buiten dat netwerk.
+# Zie het kopje "Interne registry" in de README.
+.npmrc
